@@ -1,76 +1,69 @@
-from datetime import datetime
-
-class ItemNotaFiscal:
-    def __init__(self, cod_material, descricao, unid_medida, quantidade, 
-                 val_precounit, val_icms, cfop_cod, ncm, 
-                 cst_origem, cst_tributacao, cod_fornecedor, 
-                 uf_orig, dtemis, dtentr):
-        
-        # Identificação
-        self.COD_MATERIAL = cod_material
-        self.DESCRIÇÃO_PRODUTO = descricao
-        self.UNID_MEDIDA = unid_medida
-        self.COD_FORNECEDOR = cod_fornecedor
-        
-        # Quantidade e Valores
-        self.quantidade = float(quantidade)
-        self.VAL_PRECOUNIT = float(val_precounit)
-        self.VAL_ICMS = float(val_icms)
-        self.VAL_TOTAL = self.quantidade * self.VAL_PRECOUNIT
-        
-        # Tributação e Fiscal
-        self.CFOP_COD = cfop_cod
-        self.NCM = ncm
-        self.CST_ORIGEM = cst_origem
-        self.CST_TRIBUTAÇÃO = cst_tributacao
-        self.UF_ORIG = uf_orig
-        
-        # Datas
-        self.DTEMIS = dtemis
-        self.DTENTR = dtentr
-
-    def __str__(self):
-        return f"[{self.COD_MATERIAL}] {self.DESCRIÇÃO_PRODUTO} - Qtd: {self.quantidade} - Total: R${self.VAL_TOTAL:.2f}"
-
-def cadastrar_novo_item():
-    print("\n--- Cadastro de Novo Item ---")
+def cadastrar_produto():
+    print("\n--- Cadastro de Produto ---")
+    
+    # Pede os dados para o usuário
     try:
-        cod_material = input("Código do Material: ")
-        descricao = input("Descrição do Produto: ")
-        unid_medida = input("Unidade de Medida: ")
-        quantidade = input("Quantidade: ")
-        val_precounit = input("Valor Unitário: ")
-        val_icms = input("Valor ICMS: ")
-        cfop_cod = input("CFOP: ")
-        ncm = input("NCM: ")
-        cst_origem = input("CST Origem: ")
-        cst_tributacao = input("CST Tributação: ")
-        cod_fornecedor = input("Código Fornecedor: ")
-        uf_orig = input("UF Origem: ")
-        dtemis = input("Data Emissão (dd/mm/aaaa): ")
-        dtentr = input("Data Entrada (dd/mm/aaaa): ")
 
-        # Cria a instância
-        item = ItemNotaFiscal(cod_material, descricao, unid_medida, quantidade,
-                              val_precounit, val_icms, cfop_cod, ncm,
-                              cst_origem, cst_tributacao, cod_fornecedor,
-                              uf_orig, dtemis, dtentr)
-        return item
-    except ValueError as e:
-        print(f"Erro na conversão de dados: {e}")
+        cod = input("COD_MATERIAL: ")
+        desc = input("DESCRIÇÃO_PRODUTO: ")
+        unid = input("UNID_MEDIDA: ")
+        qtd = float(input("Quantidade: "))
+        preco = float(input("VAL_PRECOUNIT: "))
+        icms = float(input("VAL_ICMS: "))
+        cfop = input("CFOP_COD: ")
+        ncm = input("NCM: ")
+        cst = input("CST_ORIGEM: ")
+        cst_trib = input("CST_TRIBURACAO: ")
+        cod_fornecedor = input("COD_FORNECEDOR: ")
+        uf_origem = input("UF ORIGEM: ")
+        data_nf = input("DATA_NF: ")
+        data_entrada_nf = input("DATA_ENTRADA_NF: ")
+
+
+        
+        # dicionário para o produto
+        produto = {
+            "COD_MATERIAL": cod,
+            "DESCRIÇÃO_PRODUTO": desc,
+            "UNID_MEDIDA": unid,
+            "quantidade": qtd,
+            "VAL_PRECOUNIT": preco,
+            "VAL_ICMS": icms,
+            "CFOP_COD": cfop,
+            "NCM": ncm,
+            "CST_ORIGEM": cst,
+            "CST_TRIBURACAO": cst_trib,
+            "COD_FORNECEDOR": cod_fornecedor,
+            "UF ORIGEM": uf_origem,
+            "DATA_NF": data_nf,
+            "DATA_ENTRADA_NF": data_entrada_nf
+
+        }
+        return produto
+    except ValueError:
+        print("Erro: Entrada de valor inválida (quantidade/preço devem ser números).")
         return None
 
-# --- Exemplo de Uso ---
-lista_itens = []
+def exibir_produtos(lista_produtos):
+    print("\n" + "="*80)
+    print(f"{'COD':<10} | {'DESCRIÇÃO':<20} | {'UNID':<5} | {'QTD':<8} | {'PREÇO':<10} | {'ICMS':<8}")
+    print("-" * 80)
+    for p in lista_produtos:
+        print(f"{p['COD_MATERIAL']:<10} | {p['DESCRIÇÃO_PRODUTO']:<20} | {p['UNID_MEDIDA']:<5} | "
+              f"{p['quantidade']:<8.2f} | {p['VAL_PRECOUNIT']:<10.2f} | {p['VAL_ICMS']:<8.2f}")
+    print("="*80 + "\n")
 
-# Adicionar um item via terminal
-novo_item = cadastrar_novo_item()
-if novo_item:
-    lista_itens.append(novo_item)
+# Fluxo Principal
+produtos = []
+while True:
+    novo_prod = cadastrar_produto()
+    if novo_prod:
+        produtos.append(novo_prod)
+    
+    cont = input("Cadastrar novo produto? (s/n): ").lower()
+    if cont != 's':
+        break
 
-# Exibir os itens cadastrados
-print("\n--- Itens na Lista ---")
-for item in lista_itens:
-    print(item)
-    # Exemplo de acesso a atributo específico
-    print(f"   (ICMS: {item.VAL_ICMS}, CFOP: {item.CFOP_COD})")
+# Exibe o relatório final
+if produtos:
+    exibir_produtos(produtos)
