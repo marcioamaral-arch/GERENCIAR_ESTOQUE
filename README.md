@@ -1,4 +1,4 @@
-# GERENCIAR_ESTOQUE
+# FATURAMENTO_TELECOM
 O projeto trata-se da criação de uma empresa te Telecomunicações que prestará serviços de Telecomunicações e venda de mercadorias ligadas a sua prestação de serviço. 
 
 ## Funcionalidades
